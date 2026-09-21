@@ -3,10 +3,16 @@ import 'gold_calculator_screen.dart';
 import 'sell_calculator_screen.dart';
 import 'karat_converter_screen.dart';
 import 'invoice_screen.dart';
+import 'settings_screen.dart';
 import '../widgets/calculator_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final VoidCallback? onOpenSettings;
+
+  const HomeScreen({
+    super.key,
+    this.onOpenSettings,
+  });
 
   void openPage(BuildContext context, Widget page) {
     Navigator.push(
@@ -46,11 +52,11 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          const Expanded(
+                          Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(
+                                const Text(
                                   'طلایار',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
@@ -58,25 +64,32 @@ class HomeScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
-                                SizedBox(height: 2),
+                                const SizedBox(height: 2),
                                 Text(
                                   'محاسبه‌گر هوشمند طلا',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: Colors.grey,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.settings_outlined),
+                            tooltip: 'تنظیمات',
+                            onPressed: onOpenSettings,
+                            icon: const Icon(
+                              Icons.settings_outlined,
+                            ),
                           ),
                         ],
                       ),
+
                       const SizedBox(height: 22),
+
                       Container(
                         padding: const EdgeInsets.all(22),
                         decoration: BoxDecoration(
@@ -94,11 +107,11 @@ class HomeScreen extends StatelessWidget {
                             Row(
                               textDirection: TextDirection.rtl,
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Text(
                                     'محاسبه سریع و دقیق',
                                     textAlign: TextAlign.right,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
@@ -108,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(.18),
+                                    color: Colors.white.withOpacity(0.18),
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Icon(
@@ -132,7 +145,9 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+
                       const SizedBox(height: 26),
+
                       const Text(
                         'ابزارهای طلایار',
                         textAlign: TextAlign.right,
@@ -141,11 +156,13 @@ class HomeScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+
                       const SizedBox(height: 14),
                     ],
                   ),
                 ),
               ),
+
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 sliver: SliverList(
@@ -153,12 +170,14 @@ class HomeScreen extends StatelessWidget {
                     CalculatorCard(
                       icon: Icons.calculate_outlined,
                       title: 'محاسبه قیمت طلا',
-                      subtitle: 'محاسبه قیمت نهایی با اجرت، سود و مالیات',
+                      subtitle:
+                          'محاسبه قیمت نهایی با اجرت، سود و مالیات',
                       onTap: () => openPage(
                         context,
                         const GoldCalculatorScreen(),
                       ),
                     ),
+
                     CalculatorCard(
                       icon: Icons.sell_outlined,
                       title: 'محاسبه قیمت فروش',
@@ -168,32 +187,40 @@ class HomeScreen extends StatelessWidget {
                         const SellCalculatorScreen(),
                       ),
                     ),
+
                     CalculatorCard(
                       icon: Icons.swap_vert_rounded,
                       title: 'تبدیل عیار',
-                      subtitle: 'تبدیل وزن طلا بین عیارهای مختلف',
+                      subtitle:
+                          'تبدیل وزن طلا بین عیارهای مختلف',
                       onTap: () => openPage(
                         context,
                         const KaratConverterScreen(),
                       ),
                     ),
+
                     CalculatorCard(
                       icon: Icons.receipt_long_outlined,
                       title: 'فاکتور طلا',
-                      subtitle: 'نمایش جزئیات کامل مبلغ خرید',
+                      subtitle:
+                          'نمایش جزئیات کامل مبلغ خرید',
                       onTap: () => openPage(
                         context,
                         const InvoiceScreen(),
                       ),
                     ),
+
                     const SizedBox(height: 10),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 24),
+
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
                       child: Text(
                         'طلایار • نسخه ۱.۱.۰',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant,
                           fontSize: 12,
                         ),
                       ),
