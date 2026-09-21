@@ -12,8 +12,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = themeMode == ThemeMode.dark;
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -28,111 +26,108 @@ class SettingsScreen extends StatelessWidget {
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            _SectionTitle(title: 'ظاهر برنامه'),
-
+            const _SectionTitle(
+              title: 'ظاهر برنامه',
+            ),
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Column(
-                children: [
-                  RadioListTile<ThemeMode>(
-                    value: ThemeMode.light,
-                    groupValue: themeMode,
-                    onChanged: (value) {
-                      if (value != null) {
-                        onThemeChanged(value);
-                      }
-                    },
-                    title: const Text(
-                      'حالت روشن',
-                      textAlign: TextAlign.right,
+              child: RadioGroup<ThemeMode>(
+                groupValue: themeMode,
+                onChanged: (value) {
+                  if (value != null) {
+                    onThemeChanged(value);
+                  }
+                },
+                child: const Column(
+                  children: [
+                    RadioListTile<ThemeMode>(
+                      value: ThemeMode.light,
+                      title: Text(
+                        'حالت روشن',
+                        textAlign: TextAlign.right,
+                      ),
+                      subtitle: Text(
+                        'استفاده از تم روشن',
+                        textAlign: TextAlign.right,
+                      ),
+                      secondary: Icon(
+                        Icons.light_mode_outlined,
+                      ),
                     ),
-                    subtitle: const Text(
-                      'استفاده از تم روشن',
-                      textAlign: TextAlign.right,
+                    Divider(height: 1),
+                    RadioListTile<ThemeMode>(
+                      value: ThemeMode.dark,
+                      title: Text(
+                        'حالت تاریک',
+                        textAlign: TextAlign.right,
+                      ),
+                      subtitle: Text(
+                        'استفاده از تم تاریک',
+                        textAlign: TextAlign.right,
+                      ),
+                      secondary: Icon(
+                        Icons.dark_mode_outlined,
+                      ),
                     ),
-                    secondary: const Icon(
-                      Icons.light_mode_outlined,
+                    Divider(height: 1),
+                    RadioListTile<ThemeMode>(
+                      value: ThemeMode.system,
+                      title: Text(
+                        'مطابق تنظیمات گوشی',
+                        textAlign: TextAlign.right,
+                      ),
+                      subtitle: Text(
+                        'انتخاب خودکار حالت روشن یا تاریک',
+                        textAlign: TextAlign.right,
+                      ),
+                      secondary: Icon(
+                        Icons.settings_suggest_outlined,
+                      ),
                     ),
-                  ),
-                  const Divider(height: 1),
-                  RadioListTile<ThemeMode>(
-                    value: ThemeMode.dark,
-                    groupValue: themeMode,
-                    onChanged: (value) {
-                      if (value != null) {
-                        onThemeChanged(value);
-                      }
-                    },
-                    title: const Text(
-                      'حالت تاریک',
-                      textAlign: TextAlign.right,
-                    ),
-                    subtitle: const Text(
-                      'استفاده از تم تاریک',
-                      textAlign: TextAlign.right,
-                    ),
-                    secondary: const Icon(
-                      Icons.dark_mode_outlined,
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  RadioListTile<ThemeMode>(
-                    value: ThemeMode.system,
-                    groupValue: themeMode,
-                    onChanged: (value) {
-                      if (value != null) {
-                        onThemeChanged(value);
-                      }
-                    },
-                    title: const Text(
-                      'مطابق تنظیمات گوشی',
-                      textAlign: TextAlign.right,
-                    ),
-                    subtitle: const Text(
-                      'انتخاب خودکار حالت روشن یا تاریک',
-                      textAlign: TextAlign.right,
-                    ),
-                    secondary: const Icon(
-                      Icons.settings_suggest_outlined,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
             const SizedBox(height: 28),
 
-            _SectionTitle(title: 'درباره طلایار'),
+            const _SectionTitle(
+              title: 'درباره طلایار',
+            ),
 
             Card(
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: ListTile(
-                leading: Container(
+              child: const ListTile(
+                leading: SizedBox(
                   width: 44,
                   height: 44,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFC59A3D),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: const Icon(
-                    Icons.auto_awesome,
-                    color: Colors.white,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFC59A3D),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(14),
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.auto_awesome,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                title: const Text(
+                title: Text(
                   'طلایار',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   'محاسبه‌گر قیمت طلا',
                   textAlign: TextAlign.right,
                 ),
@@ -147,7 +142,9 @@ class SettingsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const ListTile(
-                leading: Icon(Icons.info_outline),
+                leading: Icon(
+                  Icons.info_outline,
+                ),
                 title: Text(
                   'نسخه برنامه',
                   textAlign: TextAlign.right,
@@ -165,9 +162,11 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             Text(
-              isDark
+              themeMode == ThemeMode.dark
                   ? 'حالت تاریک فعال است'
-                  : 'حالت روشن فعال است',
+                  : themeMode == ThemeMode.light
+                      ? 'حالت روشن فعال است'
+                      : 'حالت خودکار فعال است',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
