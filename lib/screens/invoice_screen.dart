@@ -1,6 +1,212 @@
 import 'package:flutter/material.dart';
-import '../utils/gold_formulas.dart';
-import '../widgets/number_input.dart';
 import '../widgets/result_card.dart';
-class InvoiceScreen extends StatefulWidget{const InvoiceScreen({super.key});@override State<InvoiceScreen> createState()=>_InvoiceScreenState();}
-class _InvoiceScreenState extends State<InvoiceScreen>{final price=TextEditingController(),weight=TextEditingController(),making=TextEditingController(text:'0'),profit=TextEditingController(text:'0'),tax=TextEditingController(text:'0');double total=0,raw=0,makingValue=0,profitValue=0,taxValue=0;double n(TextEditingController c)=>double.tryParse(c.text)??0;void calculate(){raw=GoldFormulas.rawGoldValue(weight:n(weight),pricePerGram:n(price));makingValue=GoldFormulas.makingCharge(rawValue:raw,makingPercent:n(making));profitValue=GoldFormulas.sellerProfit(rawValue:raw,makingValue:makingValue,profitPercent:n(profit));taxValue=GoldFormulas.tax(taxBase:raw+makingValue+profitValue,taxPercent:n(tax));setState(()=>total=raw+makingValue+profitValue+taxValue);}@override void dispose(){price.dispose();weight.dispose();making.dispose();profit.dispose();tax.dispose();super.dispose();}@override Widget build(BuildContext context)=>Scaffold(appBar:AppBar(title:const Text('فاکتور طلا')),body:ListView(padding:const EdgeInsets.all(20),children:[NumberInput(controller:price,label:'قیمت هر گرم طلای ۱۸ عیار',suffix:'تومان',decimal:false),const SizedBox(height:12),NumberInput(controller:weight,label:'وزن',suffix:'گرم'),const SizedBox(height:12),NumberInput(controller:making,label:'اجرت',suffix:'%'),const SizedBox(height:12),NumberInput(controller:profit,label:'سود فروشنده',suffix:'%'),const SizedBox(height:12),NumberInput(controller:tax,label:'مالیات',suffix:'%'),const SizedBox(height:18),FilledButton.icon(onPressed:calculate,icon:const Icon(Icons.receipt_long_rounded),label:const Text('ساخت فاکتور')),if(total>0)...[const SizedBox(height:18),ResultCard(title:'جزئیات فاکتور',children:[ResultRow(title:'ارزش طلا',value:raw),ResultRow(title:'اجرت ساخت',value:makingValue),ResultRow(title:'سود فروشنده',value:profitValue),ResultRow(title:'مالیات',value:taxValue),const Divider(height:20),ResultRow(title:'مبلغ نهایی',value:total,bold:true)])]]));}
+
+class InvoiceScreen extends StatelessWidget {
+  const InvoiceScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'فاکتور طلا',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
+          children: [
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF4E8C9),
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: const Row(
+                textDirection: TextDirection.rtl,
+                children: [
+                  Icon(
+                    Icons.receipt_long_outlined,
+                    color: Color(0xFF9A7525),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'جزئیات یک فاکتور نمونه خرید طلا را مشاهده کنید.',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        height: 1.6,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      'فاکتور خرید طلا',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'طلایار',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 13,
+                      ),
+                    ),
+                    const Divider(height: 30),
+
+                    _InvoiceRow(
+                      title: 'نوع طلا',
+                      value: 'طلای ۱۸ عیار',
+                    ),
+                    _InvoiceRow(
+                      title: 'وزن',
+                      value: '2.50 گرم',
+                    ),
+                    _InvoiceRow(
+                      title: 'قیمت هر گرم',
+                      value: '5,000,000 تومان',
+                    ),
+                    _InvoiceRow(
+                      title: 'قیمت طلای خام',
+                      value: '12,500,000 تومان',
+                    ),
+                    _InvoiceRow(
+                      title: 'اجرت ساخت',
+                      value: '2,500,000 تومان',
+                    ),
+                    _InvoiceRow(
+                      title: 'سود فروشنده',
+                      value: '1,050,000 تومان',
+                    ),
+                    _InvoiceRow(
+                      title: 'مالیات ۱۰٪',
+                      value: '355,000 تومان',
+                    ),
+
+                    const Divider(height: 30),
+
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF4E8C9),
+                        borderRadius: BorderRadius.circular(17),
+                      ),
+                      child: const Row(
+                        textDirection: TextDirection.rtl,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'مبلغ نهایی',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '16,405,000 تومان',
+                            textDirection: TextDirection.ltr,
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF9A7525),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: const Text(
+                'این صفحه نمونه‌ای از ساختار فاکتور است. اطلاعات واقعی می‌تواند از محاسبه قیمت طلا دریافت شود.',
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontSize: 12,
+                  height: 1.7,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InvoiceRow extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const _InvoiceRow({
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 9),
+      child: Row(
+        textDirection: TextDirection.rtl,
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                color: Colors.grey.shade700,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            value,
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
