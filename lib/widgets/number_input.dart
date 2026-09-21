@@ -36,9 +36,9 @@ class NumberInput extends StatelessWidget {
         labelStyle: const TextStyle(
           fontWeight: FontWeight.w600,
         ),
-        suffixStyle: const TextStyle(
+        suffixStyle: TextStyle(
           fontWeight: FontWeight.w600,
-          color: Color(0xFF9A7525),
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
