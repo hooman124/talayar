@@ -16,6 +16,8 @@ class CalculatorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Card(
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 14),
@@ -34,24 +36,26 @@ class CalculatorCard extends StatelessWidget {
                 width: 54,
                 height: 54,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF4E8C9),
+                  color: colorScheme.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(17),
                 ),
                 child: Icon(
                   icon,
-                  color: const Color(0xFF9A7525),
+                  color: colorScheme.primary,
                   size: 28,
                 ),
               ),
+
               const SizedBox(width: 16),
+
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  textDirection: TextDirection.rtl,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
                       title,
                       textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -61,19 +65,23 @@ class CalculatorCard extends StatelessWidget {
                     Text(
                       subtitle,
                       textAlign: TextAlign.right,
+                      textDirection: TextDirection.rtl,
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        height: 1.5,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
                 ),
               ),
+
               const SizedBox(width: 8),
-              const Icon(
+
+              Icon(
                 Icons.arrow_back_ios_new_rounded,
                 size: 18,
-                color: Color(0xFFC59A3D),
+                color: colorScheme.primary,
               ),
             ],
           ),
