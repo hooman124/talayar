@@ -1,23 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'screens/home_screen.dart';
 import 'screens/settings_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const TalayarApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final savedTheme = prefs.getString('theme_mode') ?? 'system';
+
+  ThemeMode initialTheme;
+
+  switch (savedTheme) {
+    case 'light':
+      initialTheme = ThemeMode.light;
+      break;
+    case 'dark':
+      initialTheme = ThemeMode.dark;
+      break;
+    default:
+      initialTheme = ThemeMode.system;
+  }
+
+  runApp(
+    TalayarApp(
+      initialThemeMode: initialTheme,
+    ),
+  );
 }
 
 class TalayarApp extends StatefulWidget {
-  const TalayarApp({super.key});
+  final ThemeMode initialThemeMode;
+
+  const TalayarApp({
+    super.key,
+    required this.initialThemeMode,
+  });
 
   @override
   State<TalayarApp> createState() => _TalayarAppState();
 }
 
 class _TalayarAppState extends State<TalayarApp> {
-  ThemeMode themeMode = ThemeMode.system;
+  late ThemeMode themeMode;
 
-  void changeTheme(ThemeMode mode) {
+  @override
+  void initState() {
+    super.initState();
+    themeMode = widget.initialThemeMode;
+  }
+
+  Future<void> changeTheme(ThemeMode mode) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString(
+      'theme_mode',
+      mode.name,
+    );
+
     setState(() {
       themeMode = mode;
     });
@@ -50,19 +91,19 @@ class _TalayarAppState extends State<TalayarApp> {
             horizontal: 16,
             vertical: 15,
           ),
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(16),
             ),
             borderSide: BorderSide.none,
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(16),
             ),
             borderSide: BorderSide.none,
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(16),
             ),
