@@ -3,7 +3,6 @@ import 'gold_calculator_screen.dart';
 import 'sell_calculator_screen.dart';
 import 'karat_converter_screen.dart';
 import 'invoice_screen.dart';
-import 'settings_screen.dart';
 import '../widgets/calculator_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -121,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.18),
+                                    color: Colors.white.withValues(alpha: 0.18),
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Icon(
